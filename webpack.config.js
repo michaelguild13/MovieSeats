@@ -1,9 +1,14 @@
 module.exports = {
+  mode: 'development',
   entry: {
     app: './src/index.js',
     server: './src/server.js'
   },
   target:'node',
+  devtool: 'inline-source-map',
+  devServer: {
+    contentBase: './dist'
+  },
   module: {
     rules: [
       {

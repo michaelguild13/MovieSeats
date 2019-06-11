@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "webpack": "npx webpack --mode=production",
+    "start": "concurrently \"npm:client\" \"npm:server\"",
+    "build": "npx webpack",
     "server": "node ./dist/server.js",
+    "client": "webpack-dev-server --open",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,10 +25,12 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.0",
+    "concurrently": "^4.1.0",
     "ts-loader": "^6.0.2",
     "tslint": "^5.17.0",
     "typescript": "^3.5.1",
     "webpack": "^4.33.0",
-    "webpack-cli": "^3.3.4"
+    "webpack-cli": "^3.3.4",
+    "webpack-dev-server": "^3.7.1"
   }
 }
