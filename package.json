@@ -1,0 +1,19 @@
+{
+  "name": "movieseats",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelguild13/MovieSeats.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michaelguild13/MovieSeats/issues"
+  },
+  "homepage": "https://github.com/michaelguild13/MovieSeats#readme"
+}
