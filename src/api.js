@@ -1,11 +1,12 @@
 import express from 'express'
+import data from './data'
 
-console.log('test')
+let DATA = data
 
 const API = express()
 
 API.get('/', (req, res) => {
-  res.status(200).json({ name: 'john' })
+  res.json(DATA)
 })
 
 export default API
