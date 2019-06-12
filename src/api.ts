@@ -4,6 +4,23 @@ import data, { iVenueWithSeats, iSeat } from './data'
 
 let DATA: iVenueWithSeats = data
 
+export const getLetter = (n: number) => {
+  if (!!n && n <= 0) return ''
+  const alpha = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+  const maxLetters = 26
+  let times = 1
+  let index = n - 1
+  let letter: string[] = []
+  if (n > maxLetters) {
+    times = Math.floor(n / maxLetters) + 1
+    index = (n % maxLetters) - 1 // array starts at 0
+  }
+  while (times--) {
+    letter.push(alpha[index])
+  }
+  return letter.join('')
+}
+
 export const getBestSeats = (n: number, data:iVenueWithSeats) => {
 
 }

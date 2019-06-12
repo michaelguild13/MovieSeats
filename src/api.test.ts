@@ -1,6 +1,6 @@
 import request from 'supertest'
 import express from 'express'
-import API from './api'
+import API, { getBestSeats, getLetter } from './api'
 import data, { iVenueWithSeats } from './data'
 
 const SERVER = express()
@@ -60,5 +60,20 @@ describe('Test API', () => {
               })
               .expect(200, Data)
     })
+  })
+})
+
+describe('getBestSeats', () => {
+  it('Should give me the best seats', () => {
+
+  })
+})
+
+describe('getLetter', () => {
+  it('Should a letter', () => {
+    expect(getLetter(1)).toBe('a')
+    expect(getLetter(2)).toBe('b')
+    expect(getLetter(29)).toBe('cc')
+    expect(getLetter(55)).toBe('ccc')
   })
 })
