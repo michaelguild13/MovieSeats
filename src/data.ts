@@ -5,19 +5,21 @@ export interface iSeat {
     status: string
 }
 
-export interface iVenueData {
+export interface iVenue {
+    rows: number,
+    columns: number
+}
+
+export interface iVenueWithSeats {
     venue: {
-        layout: {
-            rows: number,
-            columns: number
-        }
+        layout: iVenue
     },
     seats?: {
         [key: string]: iSeat
     }
 }
 
-export default {
+const data: iVenueWithSeats = {
   "venue": {
       "layout": {
           "rows": 10,
@@ -45,3 +47,5 @@ export default {
       }
   }
 }
+
+export default data
