@@ -74,7 +74,7 @@ module.exports = {
     "js",
   //   "json",
   //   "jsx",
-  //   "ts",
+    "ts",
   //   "tsx",
   //   "node"
   ],
@@ -169,7 +169,7 @@ module.exports = {
 
   // A map from regular expressions to paths to transformers
   transform: {
-    '^.+\\.js?$': 'ts-jest'
+    '^.+\\.tsx?$': 'ts-jest'
   }
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation

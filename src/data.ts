@@ -1,3 +1,22 @@
+export interface iSeat {
+    id: string,
+    row: string,
+    column: number,
+    status: string
+}
+
+export interface iVenueData {
+    venue: {
+        layout: {
+            rows: number,
+            columns: number
+        }
+    },
+    seats?: {
+        [key: string]: iSeat
+    }
+}
+
 export default {
   "venue": {
       "layout": {

@@ -8,7 +8,7 @@ describe('Test API', () => {
               .get('/')
               .expect(200, data)
   })
-  it('should fail on post', () => {
+  it('should fail on post to root', () => {
     return request(API)
             .post('/')
             .expect(404, {})
