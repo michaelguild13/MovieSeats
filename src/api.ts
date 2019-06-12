@@ -21,34 +21,72 @@ export const getRowLetter = (n: number) => {
   return letter.join('')
 }
 
-export const getVenueArrayMap = (data:iVenueWithSeats) => {
+// Creates an array of list of seating options
+export const getVenueSeatsList = (data:iVenueWithSeats) => {
   let {venue: {layout: {rows, columns}}} = data
   // build a map...assuming the list of seat keys isn't safe
   // to assume are available
-  //console.log(Object.keys(seats))
   let rowCount: number = 0
   let colCount: number = 0
-  let venueArrayMap: string[] = []
+  let venueSeatsList: string[] = []
   while(rowCount !== rows) {
     rowCount++
     let row:string = getRowLetter(rowCount)
     while (colCount !== columns) {
       colCount++
-      venueArrayMap.push(`${row}${colCount}`)
+      venueSeatsList.push(`${row}${colCount}`)
     }
     // start loop though all the columns agian
     colCount = 0
   }
-  return venueArrayMap
+  return venueSeatsList
 }
 
-export const getAvailableSeats = (data:iVenueWithSeats, venueArrayMap: string[]) => {
+// Simple solution for if the rows never go past 26
+// export const getAvailableSeats = (data:iVenueWithSeats) => {
+//   const { seats = {} } = data
+//   const seatKeys = Object.keys(seats).sort() // alpha order
+//   let availableSeats: string[] = []
+//   for (let seat of seatKeys) {
+//     if (seats[seat].status === 'AVAILABLE') {
+//       availableSeats.push(seat)
+//     }
+//   }
+//   return availableSeats
+// }
+
+export const getAvailableSeats = (data:iVenueWithSeats) => {
   let { seats = {} } = data
-  return venueArrayMap.filter( (i) => {
-    if (!seats[i]) return
+  const listOfSeats = getVenueSeatsList(data).filter( (i) => {
+    if (!seats[i]) return // no seat = no availability
     const status = seats[i].status || ''
     return status === 'AVAILABLE'
   })
+  return listOfSeats
+}
+
+export const isEven = (n: number) => {
+  return (n % 2 === 0)
+}
+
+const getCenterOfRow = (n: number) => {
+  // if even number assume left seat is best, ex: 6 = 3
+  // if odd, higher number is better, ex: 5 = 3
+  if(isEven(n)) {
+    return  n / 2
+  } else {
+    return Math.ceil(n / 2)
+  }
+}
+
+const getDifference = (a, b) => {
+  return Math.abs(a - b)
+}
+
+export const getBestSeats = (data:iVenueWithSeats) => {
+  const  { venue: {layout: {rows, columns}}, seats = {}} = data
+  let centerRow = getCenterOfRow(columns)
+  console.log(centerRow)
 }
 
 const API = Router()

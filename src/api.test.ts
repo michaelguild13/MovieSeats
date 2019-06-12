@@ -1,6 +1,12 @@
 import request from 'supertest'
 import express from 'express'
-import API, { getVenueArrayMap, getRowLetter, getAvailableSeats } from './api'
+import API, {
+  getVenueSeatsList,
+  getRowLetter,
+  getAvailableSeats,
+  getBestSeats,
+  isEven
+} from './api'
 import data, { iVenueWithSeats } from './data'
 
 const SERVER = express()
@@ -63,40 +69,70 @@ describe('Test API', () => {
   })
 })
 
-describe('getVenueArrayMap', () => {
-  it('Should give me an array of all possible seats', () => {
-    const Data = {
-      venue: {
-        layout: {rows: 2, columns: 2}
+describe('Test utilities', () => {
+  let Data: iVenueWithSeats
+
+  beforeEach(() => {
+    Data = data
+  })
+
+  describe('isEven', () => {
+    it('should return true on even numbers', () => {
+      expect(isEven(6)).toBe(true)
+    })
+    it('should return false on even numbers', () => {
+      expect(isEven(7)).toBe(false)
+    })
+  })
+
+  describe('getVenueSeatsList', () => {
+    it('Should give me an array of all possible seats', () => {
+      const Data = {
+        venue: {
+          layout: {rows: 2, columns: 2}
+        }
       }
-    }
-    expect(getVenueArrayMap(Data)).toEqual(['a1','a2','b1','b2'])
+      expect(getVenueSeatsList(Data)).toEqual(['a1','a2','b1','b2'])
+    })
   })
-})
 
-describe('getLetter', () => {
-  it('Should return a letter', () => {
-    expect(getRowLetter(0)).toBe('')
-    expect(getRowLetter(1)).toBe('a')
-    expect(getRowLetter(2)).toBe('b')
-    expect(getRowLetter(29)).toBe('cc')
-    expect(getRowLetter(55)).toBe('ccc')
+  describe('getLetter', () => {
+    it('Should return a letter', () => {
+      expect(getRowLetter(0)).toBe('')
+      expect(getRowLetter(1)).toBe('a')
+      expect(getRowLetter(2)).toBe('b')
+      expect(getRowLetter(29)).toBe('cc')
+      expect(getRowLetter(55)).toBe('ccc')
+    })
   })
-})
 
-describe('getLetter', () => {
-  it('Should return a letter', () => {
-    expect(getRowLetter(0)).toBe('')
-    expect(getRowLetter(1)).toBe('a')
-    expect(getRowLetter(2)).toBe('b')
-    expect(getRowLetter(29)).toBe('cc')
-    expect(getRowLetter(55)).toBe('ccc')
+  describe.only('getAvailableSeats', () => {
+    it('Should give me an array of available seats in order', () => {
+      Data.venue.layout.rows = 50
+      Data.seats = {
+        'z7': {
+            id: 'z7',
+            row: 'z',
+            column: 7,
+            status: 'AVAILABLE'
+        },
+        'aa1': {
+          id: 'aa1',
+          row: 'aa',
+          column: 7,
+          status: 'AVAILABLE'
+        },
+        ...Data.seats
+      }
+
+      expect(getAvailableSeats(Data)).toEqual(['a1','b5','h7','z7', 'aa1'])
+    })
   })
-})
 
-describe('getAvailableSeats', () => {
-  it('Should give me an array of available seats', () => {
-    const venueMap = getVenueArrayMap(data)
-    expect(getAvailableSeats(data, venueMap)).toEqual(['a1','b5','h7'])
+  describe('getBestSeats', () => {
+    const listOfSeats = getAvailableSeats(Data)
+    it('Should return the best available seats', () => {
+      expect(getBestSeats(Data)).toEqual(['a6'])
+    })
   })
 })
