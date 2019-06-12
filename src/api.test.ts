@@ -1,6 +1,6 @@
 import request from 'supertest'
 import express from 'express'
-import API, { getBestSeats, getLetter } from './api'
+import API, { getVenueArrayMap, getRowLetter, getAvailableSeats } from './api'
 import data, { iVenueWithSeats } from './data'
 
 const SERVER = express()
@@ -63,17 +63,40 @@ describe('Test API', () => {
   })
 })
 
-describe('getBestSeats', () => {
-  it('Should give me the best seats', () => {
-
+describe('getVenueArrayMap', () => {
+  it('Should give me an array of all possible seats', () => {
+    const Data = {
+      venue: {
+        layout: {rows: 2, columns: 2}
+      }
+    }
+    expect(getVenueArrayMap(Data)).toEqual(['a1','a2','b1','b2'])
   })
 })
 
 describe('getLetter', () => {
-  it('Should a letter', () => {
-    expect(getLetter(1)).toBe('a')
-    expect(getLetter(2)).toBe('b')
-    expect(getLetter(29)).toBe('cc')
-    expect(getLetter(55)).toBe('ccc')
+  it('Should return a letter', () => {
+    expect(getRowLetter(0)).toBe('')
+    expect(getRowLetter(1)).toBe('a')
+    expect(getRowLetter(2)).toBe('b')
+    expect(getRowLetter(29)).toBe('cc')
+    expect(getRowLetter(55)).toBe('ccc')
+  })
+})
+
+describe('getLetter', () => {
+  it('Should return a letter', () => {
+    expect(getRowLetter(0)).toBe('')
+    expect(getRowLetter(1)).toBe('a')
+    expect(getRowLetter(2)).toBe('b')
+    expect(getRowLetter(29)).toBe('cc')
+    expect(getRowLetter(55)).toBe('ccc')
+  })
+})
+
+describe('getAvailableSeats', () => {
+  it('Should give me an array of available seats', () => {
+    const venueMap = getVenueArrayMap(data)
+    expect(getAvailableSeats(data, venueMap)).toEqual(['a1','b5','h7'])
   })
 })

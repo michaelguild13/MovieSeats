@@ -4,7 +4,7 @@ import data, { iVenueWithSeats, iSeat } from './data'
 
 let DATA: iVenueWithSeats = data
 
-export const getLetter = (n: number) => {
+export const getRowLetter = (n: number) => {
   if (!!n && n <= 0) return ''
   const alpha = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
   const maxLetters = 26
@@ -21,8 +21,34 @@ export const getLetter = (n: number) => {
   return letter.join('')
 }
 
-export const getBestSeats = (n: number, data:iVenueWithSeats) => {
+export const getVenueArrayMap = (data:iVenueWithSeats) => {
+  let {venue: {layout: {rows, columns}}} = data
+  // build a map...assuming the list of seat keys isn't safe
+  // to assume are available
+  //console.log(Object.keys(seats))
+  let rowCount: number = 0
+  let colCount: number = 0
+  let venueArrayMap: string[] = []
+  while(rowCount !== rows) {
+    rowCount++
+    let row:string = getRowLetter(rowCount)
+    while (colCount !== columns) {
+      colCount++
+      venueArrayMap.push(`${row}${colCount}`)
+    }
+    // start loop though all the columns agian
+    colCount = 0
+  }
+  return venueArrayMap
+}
 
+export const getAvailableSeats = (data:iVenueWithSeats, venueArrayMap: string[]) => {
+  let { seats = {} } = data
+  return venueArrayMap.filter( (i) => {
+    if (!seats[i]) return
+    const status = seats[i].status || ''
+    return status === 'AVAILABLE'
+  })
 }
 
 const API = Router()
