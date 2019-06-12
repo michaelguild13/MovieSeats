@@ -18,7 +18,7 @@ import Form from 'react-jsonschema-form'
 
 const App = () => (
   <div>
-    poopy
+    client
   </div>
 )
 
