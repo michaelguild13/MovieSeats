@@ -1,8 +1,16 @@
+export interface iVenueGrid {
+    [key: string]: number[]
+}
+
 export interface iSeat {
     id: string,
     row: string,
     column: number,
     status: string
+}
+
+export interface iSeats {
+ [key: string]: iSeat
 }
 
 export interface iVenue {
@@ -14,9 +22,7 @@ export interface iVenueWithSeats {
     venue: {
         layout: iVenue
     },
-    seats?: {
-        [key: string]: iSeat
-    }
+    seats?: iSeats
 }
 
 const data: iVenueWithSeats = {
