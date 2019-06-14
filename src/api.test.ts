@@ -219,7 +219,26 @@ describe('Test utilities', () => {
       expect(getBestSeats(Data, grid)).toEqual(['a2'])
     })
 
-    it.only('venue with 10 rows and 12 columns with A6 unavailable should return A5 even though A7 is available', () => {
+    it('venue with 10 rows and 12 columns with all of A Unavailable should give me b6', () => {
+      Data.venue.layout.rows = 10
+      Data.venue.layout.columns = 12
+      let count = 12
+      let seats = {}
+      while(count--) {
+        seats[`a${count}`] = {
+          id: `a${count}`,
+          row: "a",
+          column: count,
+          status: UNAVAILABLE
+        }
+      }
+      Data.seats = seats
+      let grid = getMultiDimentionalVenueLayout(Data)
+      grid = updateMultiDimentionalVenueLayout(Data, grid)
+      expect(getBestSeats(Data, grid)).toEqual(['b6'])
+    })
+
+    it('venue with 10 rows and 12 columns with A6 unavailable should return A5 even though A7 is available', () => {
       Data.venue.layout.rows = 10
       Data.venue.layout.columns = 12
       let count = 12
@@ -239,7 +258,7 @@ describe('Test utilities', () => {
       expect(getBestSeats(Data, grid)).toEqual(['a5'])
     })
 
-    it.only('venue with 10 rows and 12 columns with A6 unavailable should return A7 and A8 since A4 is not available if group size is 2', () => {
+    it('venue with 10 rows and 12 columns with A6 unavailable should return A7 and A8 since A4 is not available if group size is 2', () => {
       Data.venue.layout.rows = 10
       Data.venue.layout.columns = 12
       let count = 12
@@ -253,10 +272,30 @@ describe('Test utilities', () => {
         }
       }
       seats['a6'].status = UNAVAILABLE
+      seats['a4'].status = UNAVAILABLE
       Data.seats = seats
       let grid = getMultiDimentionalVenueLayout(Data)
       grid = updateMultiDimentionalVenueLayout(Data, grid)
       expect(getBestSeats(Data, grid, 2)).toEqual(['a7','a8'])
+    })
+
+    it.only('venue with 10 rows and 5 columns with All of A unavailable, a request for 2 seats should give b2 and b3', () => {
+      Data.venue.layout.rows = 10
+      Data.venue.layout.columns = 5
+      let count = 5
+      let seats = {}
+      while(count--) {
+        seats[`a${count}`] = {
+          id: `a${count}`,
+          row: "a",
+          column: count,
+          status: UNAVAILABLE
+        }
+      }
+      Data.seats = seats
+      let grid = getMultiDimentionalVenueLayout(Data)
+      grid = updateMultiDimentionalVenueLayout(Data, grid)
+      expect(getBestSeats(Data, grid, 2)).toEqual(['b2','b3'])
     })
   })
 })
