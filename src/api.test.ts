@@ -110,6 +110,7 @@ describe('Test utilities', () => {
   describe('getAvailableSeats', () => {
     it('Should give me an array of available seats in order', () => {
       Data.venue.layout.rows = 50
+      Data.venue.layout.columns = 10
       Data.seats = {
         'z7': {
             id: 'z7',
@@ -125,7 +126,7 @@ describe('Test utilities', () => {
         },
         ...Data.seats
       }
-
+      console.log(Data)
       expect(getAvailableSeats(Data)).toEqual(['a1','b5','h7','z7', 'aa1'])
     })
   })
@@ -279,7 +280,7 @@ describe('Test utilities', () => {
       expect(getBestSeats(Data, grid, 2)).toEqual(['a7','a8'])
     })
 
-    it.only('venue with 10 rows and 5 columns with All of A unavailable, a request for 2 seats should give b2 and b3', () => {
+    it('venue with 10 rows and 5 columns with All of A unavailable, a request for 2 seats should give b2 and b3', () => {
       Data.venue.layout.rows = 10
       Data.venue.layout.columns = 5
       let count = 5
