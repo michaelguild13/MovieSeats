@@ -108,40 +108,6 @@ interface iGetSubsequentMatches {
   groupSize: number
 }
 
-export const getSubsequentMatches = ({startIndex, row, direction, groupSize = 1}: iGetSubsequentMatches) => {
-  const countToZero = direction === 0
-  let indexCount = startIndex
-  let bestSeats: number[] = []
-
-  // count from start to zero
-  while (countToZero && indexCount >= 0) {
-    if (row[indexCount] === 0) {
-      bestSeats.push(indexCount)
-    } else {
-      bestSeats = []
-      break
-    }
-    if (bestSeats.length === groupSize) break
-    // count down
-    indexCount--
-  }
-
-   // count from start to max
-   while (!countToZero && indexCount <= direction) {
-    if (row[indexCount] === 0) {
-      bestSeats.push(indexCount)
-    } else {
-      bestSeats = []
-      break
-    }
-    if (bestSeats.length === groupSize) break
-    // count down
-    indexCount++
-  }
-
-  return bestSeats
-}
-
 interface iGetRowSeatsAvailable {
   startIndex: number,
   columns: number,
@@ -150,34 +116,47 @@ interface iGetRowSeatsAvailable {
   groupSize: number
 }
 
+export const getSubsequentMatches = ({startIndex, row, direction, groupSize = 1}: iGetSubsequentMatches) => {
+  const countToZero = direction === 0
+  let indexCount = startIndex
+  let bestSeats: number[] = []
+
+  // count from start to zero
+  while (indexCount >= 0 || indexCount <= direction) {
+    if (row[indexCount] === 0) {
+      bestSeats.push(indexCount)
+    } else {
+      return bestSeats
+    }
+    if (bestSeats.length === groupSize) return bestSeats
+    // count down
+    countToZero ? indexCount-- : indexCount++
+  }
+}
 
 export const getRowSeatsAvailable = ({startIndex, columns, grid, row, groupSize = 1}: iGetRowSeatsAvailable) => {
   let leftIndex = startIndex
   let rightIndex = startIndex
   let bestSeats: string[] = []
-  const prependRow = i => {
-    return `${row}${i}`
-  }
+  const prependRow = i => (`${row}${i}`)
 
   while (leftIndex > 0 && rightIndex < columns) {
 
     // then check to the left until 0
     if (grid[row][leftIndex] === 0) {
-      // bestSeats.push(`${row}${leftIndex}`)
       bestSeats = getSubsequentMatches({startIndex: leftIndex, row: grid[row], direction: 0, groupSize})
                     .reverse() // a4,a5 starting count from a6
                     .map(prependRow)
-      if (bestSeats.length === groupSize) break;
+      if (bestSeats.length === groupSize) break
     }
     // then check to the right until max column
     if (grid[row][rightIndex] === 0) {
-      // bestSeats.push(`${row}${rightIndex}`)
       bestSeats = getSubsequentMatches({startIndex: rightIndex, row: grid[row], direction: columns, groupSize})
                     .map(prependRow)
-      if (bestSeats.length === groupSize) break;
+      if (bestSeats.length === groupSize) break
     }
 
-    if (bestSeats.length === groupSize) break;
+    if (bestSeats.length === groupSize) break
 
     leftIndex--
     rightIndex++
@@ -187,7 +166,7 @@ export const getRowSeatsAvailable = ({startIndex, columns, grid, row, groupSize 
 }
 
 export const getBestSeats = (data:iVenueWithSeats, grid: iVenueGrid, groupSize: number = 1) => {
-  const  { venue: {layout: {columns}}, seats = {}} = data
+  const  { venue: {layout: {columns}}} = data
   const rows = Object.keys(grid)
   const startIndex: number = getCenterOfRow(columns)
   let bestSeats: string[] = []

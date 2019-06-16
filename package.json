@@ -6,7 +6,7 @@
   "scripts": {
     "start": "concurrently \"npm:client\" \"npm:server\"",
     "build": "npx webpack",
-    "server": "node ./dist/server.js",
+    "server": "nodemon ./dist/server.js",
     "client": "webpack-dev-server --open",
     "test": "jest"
   },

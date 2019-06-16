@@ -77,7 +77,7 @@ describe('Test utilities', () => {
   let Data: iVenueWithSeats
 
   beforeEach(() => {
-    Data = data
+    Data = {...data}
   })
 
   describe('isEven', () => {
@@ -126,7 +126,6 @@ describe('Test utilities', () => {
         },
         ...Data.seats
       }
-      console.log(Data)
       expect(getAvailableSeats(Data)).toEqual(['a1','b5','h7','z7', 'aa1'])
     })
   })
@@ -297,6 +296,15 @@ describe('Test utilities', () => {
       let grid = getMultiDimentionalVenueLayout(Data)
       grid = updateMultiDimentionalVenueLayout(Data, grid)
       expect(getBestSeats(Data, grid, 2)).toEqual(['b2','b3'])
+    })
+
+    it('should return 5 seats in a row', () => {
+      Data.venue.layout.rows = 10
+      Data.venue.layout.columns = 50
+      console.log(data)
+      let grid = getMultiDimentionalVenueLayout(Data)
+      grid = updateMultiDimentionalVenueLayout(Data, grid)
+      expect(getBestSeats(Data, grid, 5)).toEqual([ 'a21', 'a22', 'a23', 'a24', 'a25' ])
     })
   })
 })

@@ -2,23 +2,20 @@ import express, { Router } from 'express'
 import helmet from 'helmet'
 
 import {
+  updateMultiDimentionalVenueLayout,
   getMultiDimentionalVenueLayout,
-  getVenueSeatsList,
-  getRowLetter,
-  getAvailableSeats,
   getBestSeats,
-  isEven
 } from './utils'
 
 import data, { iVenueWithSeats, iSeat } from './data'
 
 let DATA: iVenueWithSeats = data
-let MultiDimentionalVenueLayout = getMultiDimentionalVenueLayout(DATA)
+let GRID = updateMultiDimentionalVenueLayout(DATA, getMultiDimentionalVenueLayout(DATA))
 
 const API = Router()
 
 // https://helmetjs.github.io/
-API.use(helmet())
+// API.use(helmet())
 API.use(express.json())
 
 // get all the data
@@ -39,13 +36,16 @@ API.put('/venue', (req, res) => {
 })
 
 // get best seats query url
-API.get('/best:numberOfSeats', (req, res) => {
-  const { params: numberOfSeats } = req
-  if (!!numberOfSeats && numberOfSeats > 0) {
+API.get('/bestseats', (req, res) => {
+  console.log('sdkfjalsfj')
+  res.json(getBestSeats(DATA, GRID))
+})
 
-  }
-
-  res.json(DATA)
+API.get('/bestseats/:groupsize', (req, res) => {
+  const { params: { groupsize } } = req
+  console.log(groupsize)
+  const seats = getBestSeats(DATA, GRID, groupsize)
+  res.json(seats)
 })
 
 // Handle 404
