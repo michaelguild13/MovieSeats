@@ -12,10 +12,11 @@ List of things missing that I want to add:
 ## Install
 `npm install`
 
-# Run
+# Commands
 `npm start` - starts server and client
 `npm run server` - runs only the server
 `npm run build` - builds the project
+`npm test` - runs jest tests
 
 #	Routes
 `GET: api/v1/` - gets Data object
