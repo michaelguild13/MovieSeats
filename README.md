@@ -1,5 +1,9 @@
 # Get best Seats!
 This is to get the best seats.
+I over baked this...Had too much fun with the init setup for what I wanted.
+I could've solved all of this on time with less things involved but...I had too much fun starting it off.
+There is some code refactoring I would want to do.
+
 List of things missing that I want to add:
 
  - Request body checks via express-validator
