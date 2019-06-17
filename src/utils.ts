@@ -126,33 +126,35 @@ export const getSubsequentMatches = ({startIndex, row, direction, groupSize = 1}
     if (row[indexCount] === 0) {
       bestSeats.push(indexCount)
     } else {
-      return bestSeats
+      break
     }
-    if (bestSeats.length === groupSize) return bestSeats
+    if (bestSeats.length === groupSize) {
+      break
+    }
     // count down
     countToZero ? indexCount-- : indexCount++
   }
+  return bestSeats
 }
 
 export const getRowSeatsAvailable = ({startIndex, columns, grid, row, groupSize = 1}: iGetRowSeatsAvailable) => {
   let leftIndex = startIndex
   let rightIndex = startIndex
   let bestSeats: string[] = []
-  const prependRow = i => (`${row}${i}`)
+  const convertToRowSeatString = i => (`${row}${i}`)
 
   while (leftIndex > 0 && rightIndex < columns) {
-
     // then check to the left until 0
     if (grid[row][leftIndex] === 0) {
       bestSeats = getSubsequentMatches({startIndex: leftIndex, row: grid[row], direction: 0, groupSize})
                     .reverse() // a4,a5 starting count from a6
-                    .map(prependRow)
+                    .map(convertToRowSeatString)
       if (bestSeats.length === groupSize) break
     }
     // then check to the right until max column
     if (grid[row][rightIndex] === 0) {
       bestSeats = getSubsequentMatches({startIndex: rightIndex, row: grid[row], direction: columns, groupSize})
-                    .map(prependRow)
+                    .map(convertToRowSeatString)
       if (bestSeats.length === groupSize) break
     }
 
@@ -169,17 +171,18 @@ export const getBestSeats = (data:iVenueWithSeats, grid: iVenueGrid, groupSize: 
   const  { venue: {layout: {columns}}} = data
   const rows = Object.keys(grid)
   const startIndex: number = getCenterOfRow(columns)
+  const groupSizeNumber = Number(groupSize)
   let bestSeats: string[] = []
 
   // we are assuming the grid system in in alpha order
   // coming from getMultiDimentionalVenueLayout
   rows.some( row => {
-    const rowSeats = getRowSeatsAvailable({startIndex, columns, grid, row, groupSize})
+    const rowSeats = getRowSeatsAvailable({startIndex, columns, grid, row, groupSize: groupSizeNumber})
     if (rowSeats.length > 0) {
       bestSeats = rowSeats
     }
     // exit once we have the right number of seats & redundant
-    return bestSeats.length === groupSize
+    return bestSeats.length === groupSizeNumber
   })
   return bestSeats
 }

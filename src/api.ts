@@ -1,4 +1,5 @@
 import express, { Router } from 'express'
+import { check } from 'express-validator/check'
 import helmet from 'helmet'
 
 import {
@@ -15,7 +16,7 @@ let GRID = updateMultiDimentionalVenueLayout(DATA, getMultiDimentionalVenueLayou
 const API = Router()
 
 // https://helmetjs.github.io/
-// API.use(helmet())
+API.use(helmet())
 API.use(express.json())
 
 // get all the data
@@ -24,26 +25,29 @@ API.get('/', (req, res) => {
 })
 
 // updates the venue size
-API.put('/venue', (req, res) => {
-  const { body: { rows, columns } } = req
-  if (!!rows && rows > 0) {
-    DATA.venue.layout.rows = rows
-  }
-  if (!!columns && columns > 0) {
-    DATA.venue.layout.columns = columns
-  }
-  res.json(DATA)
+API.put('/venue',
+  // [
+  //   check('username').isEmail(),
+  //   check('password').isLength({ min: 5 })
+  // ],
+  (req, res) => {
+    const { body: { rows, columns } } = req
+    if (!!rows && rows > 0) {
+      DATA.venue.layout.rows = rows
+    }
+    if (!!columns && columns > 0) {
+      DATA.venue.layout.columns = columns
+    }
+    res.json(DATA)
 })
 
 // get best seats query url
 API.get('/bestseats', (req, res) => {
-  console.log('sdkfjalsfj')
   res.json(getBestSeats(DATA, GRID))
 })
 
 API.get('/bestseats/:groupsize', (req, res) => {
   const { params: { groupsize } } = req
-  console.log(groupsize)
   const seats = getBestSeats(DATA, GRID, groupsize)
   res.json(seats)
 })
