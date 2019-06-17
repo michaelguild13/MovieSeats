@@ -24,12 +24,14 @@ API.get('/', (req, res) => {
   res.json(DATA)
 })
 
+API.put('/', (req, res) => {
+  const { body } = req
+  DATA = body
+  res.json(DATA)
+})
+
 // updates the venue size
 API.put('/venue',
-  // [
-  //   check('username').isEmail(),
-  //   check('password').isLength({ min: 5 })
-  // ],
   (req, res) => {
     const { body: { rows, columns } } = req
     if (!!rows && rows > 0) {
